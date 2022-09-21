@@ -19,13 +19,13 @@ const scene = new THREE.Scene()
 const parameters = {
     count: 1000000,
     size: 0.001,
-    radius: 5,
+    radius: 3,
     branches: 3,
-    spin: 3,
-    random: 2,
-    randomPow: 10,
-    insideColor: "#ff6030",
-    outsideColor: "#1b3984",
+    spin: 3.5,
+    random: 0.25,
+    randomPow: 5,
+    insideColor: "#ff1c1c",
+    outsideColor: "#0e69f3",
 }
 
 let material = null;
@@ -55,9 +55,13 @@ const generateGalaxy =  () => {
         let radius = Math.pow(Math.random(), parameters.randomPow) * parameters.radius
         let branchAngle = (i % parameters.branches) / parameters.branches * 2 * Math.PI
         let spinAngle = radius * parameters.spin
+        // Bruno method
+        
         let randomX = Math.pow(Math.random(), parameters.randomPow) * parameters.random * (Math.random() < 0.5 ? 1 : -1)
-        let randomY = Math.pow(Math.random(), parameters.randomPow) * parameters.random * (Math.random() < 0.5 ? 1 : -1)
+        let randomY = Math.pow(Math.random(), parameters.randomPow) * parameters.random * (Math.random() < 0.5 ? 1 : -1) / 4
         let randomZ = Math.pow(Math.random(), parameters.randomPow) * parameters.random * (Math.random() < 0.5 ? 1 : -1)
+
+        // Updating the positions
         positions[i3    ] = Math.cos(branchAngle + spinAngle) * radius + randomX
         positions[i3 + 1] = randomY
         positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
@@ -103,8 +107,8 @@ gui.add(parameters, "branches").min(2).max(20).step(1).onFinishChange(generateGa
 gui.add(parameters, "spin").min(-5).max(5).step(0.001).onFinishChange(generateGalaxy)
 gui.add(parameters, "random").min(0).max(2).step(0.001).onFinishChange(generateGalaxy)
 gui.add(parameters, "randomPow").min(1).max(10).step(0.001).onFinishChange(generateGalaxy)
-gui.addColor(parameters, "insideColor")
-gui.addColor(parameters, "outsideColor")
+gui.addColor(parameters, "insideColor").onFinishChange(generateGalaxy)
+gui.addColor(parameters, "outsideColor").onFinishChange(generateGalaxy)
 
 /**
  * Sizes
